@@ -11,7 +11,7 @@
 PipePair = Class{}
 
 -- size of the gap between pipes
-local GAP_HEIGHT = 90
+local GAP_HEIGHT = 100
 local RANDOM_LIMIT = 10
 
 function PipePair:init(y)
