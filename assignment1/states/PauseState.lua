@@ -19,6 +19,8 @@ function PauseState:update(dt)
 
         -- ask play state to reload saved variables
         gStateMachine:change('play')
+        playState = gStateMachine.current
+        playState:load()
 
         -- resume background music 
         sounds['music']:resume()

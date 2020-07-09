@@ -4,7 +4,7 @@
     cogden@cs50.harvard.edu
 
     The PlayState class is the bulk of the game, where the player actually controls the bird and
-    avoids pipes. When the player collides with a pipe, we should go to the GameOver state, where
+    avoids pipes. When the player collides with a pipe, we should go to the GameOver savedState, where
     we then go back to the main menu.
 ]]
 
@@ -16,6 +16,8 @@ PIPE_HEIGHT = 288
 
 BIRD_WIDTH = 38
 BIRD_HEIGHT = 24
+
+savedState = {}
 
 function PlayState:init()
     self.bird = Bird()
@@ -29,6 +31,29 @@ function PlayState:init()
     -- initialize our last recorded Y value for a gap placement to base other gaps off of
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
 end
+
+-- saves game savedState when exiting
+function PlayState:save()
+    savedState = {
+        ['bird'] = self.bird, 
+        ['pipePairs'] = self.pipePairs, 
+        ['timer'] = self.timer, 
+        ['score'] = self.score, 
+        ['randomDelay'] = self.randomDelay, 
+        ['lastY'] = self.lastY
+    }
+end 
+
+-- loads saved state, if any
+function PlayState:load()
+    self.bird = savedState['bird']
+    self.pipePairs = savedState['pipePairs']
+    self.timer = savedState['timer']
+    self.score = savedState['score']
+    self.randomDelay = savedState['randomDelay']
+    self.lastY = savedState['lastY']
+end 
+
 
 function PlayState:update(dt)
 
@@ -124,7 +149,7 @@ function PlayState:render()
 end
 
 --[[
-    Called when this state is transitioned to from another state.
+    Called when this savedState is transitioned to from another savedState.
 ]]
 function PlayState:enter()
     -- if we're coming from death, restart scrolling
@@ -132,9 +157,13 @@ function PlayState:enter()
 end
 
 --[[
-    Called when this state changes to another state.
+    Called when this savedState changes to another savedState.
 ]]
 function PlayState:exit()
+
+    -- save savedState before exiting, in case we need it later 
+    self:save()
+
     -- stop scrolling for the death/score screen
     scrolling = false
 end

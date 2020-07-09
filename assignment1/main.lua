@@ -176,3 +176,7 @@ function love.draw()
     
     push:finish()
 end
+
+function love.conf(t)
+	t.console = true
+end
