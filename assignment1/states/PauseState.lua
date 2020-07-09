@@ -3,8 +3,10 @@ PauseState = Class{__includes = BaseState}
 pauseIcon = love.graphics.newImage('pause.png') 
 
 function PauseState:init() 
+    -- play the pause sound
+    sounds['pause']:play()
 
-    -- pause backgroun music as soon as you pause
+    -- pause background music as soon as you pause
     sounds['music']:pause()
 
     -- save PlayState vars
