@@ -25,13 +25,32 @@ function ScoreState:update(dt)
     end
 end
 
+function drawMedal(score)
+    if score == 0 then 
+        return 
+    else
+        if score == 1 then 
+            medal = love.graphics.newImage('medals/bronze.png')
+        elseif score == 2 then  
+            medal = love.graphics.newImage('medals/silver.png')
+        else
+            medal = love.graphics.newImage('medals/gold.png')
+        end
+
+        love.graphics.draw(medal, (VIRTUAL_WIDTH - medal:getWidth())/2, (VIRTUAL_HEIGHT - medal:getHeight())/2)
+    end
+end
+
 function ScoreState:render()
     -- simply render the score to the middle of the screen
     love.graphics.setFont(flappyFont)
-    love.graphics.printf('Oof! You lost!', 0, 64, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Oof! You lost!', 0, 54, VIRTUAL_WIDTH, 'center')
 
     love.graphics.setFont(mediumFont)
-    love.graphics.printf('Score: ' .. tostring(self.score), 0, 100, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Score: ' .. tostring(self.score), 0, 90, VIRTUAL_WIDTH, 'center')
+    
+    -- displaying medal 
+    drawMedal(self.score)
 
-    love.graphics.printf('Press Enter to Play Again!', 0, 160, VIRTUAL_WIDTH, 'center')
+    love.graphics.printf('Press Enter to Play Again!', 0, 190, VIRTUAL_WIDTH, 'center')
 end
