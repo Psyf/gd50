@@ -32,6 +32,8 @@ function PlayState:enter(params)
 
     self.recoverPoints = 5000
 
+    self.powerups = {}
+
     -- give ball random starting velocity
     for _, ball in ipairs(self.balls) do 
         ball.dx = math.random(-200, 200)
@@ -55,6 +57,16 @@ function PlayState:update(dt)
 
     -- update positions based on velocity
     self.paddle:update(dt)
+
+    -- randomly generate powerup TODO 
+
+    -- for each powerup TODO 
+        -- see if powerup beyond bottom of screen  TODO 
+
+        -- see if powerup hit TODO 
+
+        -- handle each powerup type TODO 
+
 
     for _, ball in ipairs(self.balls) do 
         ball:update(dt)
