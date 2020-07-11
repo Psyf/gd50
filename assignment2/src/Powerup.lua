@@ -1,8 +1,6 @@
 Powerup = Class{}
 
 function Powerup:init(type) 
-    self.skin = math.random(10)
-
     self.height = 16 
     self.width = 16
 
@@ -12,7 +10,7 @@ function Powerup:init(type)
 
     -- slowly fall down 
     self.dx = 0 
-    self.dy = 10
+    self.dy = 1
 
     -- behaviour and skin depends on type
     self.type = type 
@@ -23,6 +21,9 @@ end
 
 function Powerup:update()
     self.y = self.y + self.dy 
+
+    -- will give it a feathery fall
+    self.x = self.x + math.random(-1, 1)
 end 
 
 --[[
@@ -45,3 +46,7 @@ function Powerup:collides(target)
     -- if the above aren't true, they're overlapping
     return true
 end
+
+function Powerup:render() 
+    love.graphics.draw(gTextures['main'], gFrames['powerups'][self.type], self.x, self.y)
+end 

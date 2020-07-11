@@ -59,14 +59,42 @@ function PlayState:update(dt)
     self.paddle:update(dt)
 
     -- randomly generate powerup TODO 
+    local p = math.random(600) 
+    if p == 1 then 
+        self.powerups[#self.powerups + 1] = Powerup(9)
+    end 
 
     -- for each powerup TODO 
+    for _, powerup in ipairs(self.powerups) do
+        powerup:update()
         -- see if powerup beyond bottom of screen  TODO 
+        if powerup.y > VIRTUAL_HEIGHT then 
+            powerup.inPlay = false 
+        end
 
         -- see if powerup hit TODO 
+        if powerup.inPlay and powerup:collides(self.paddle) then 
+            -- play a sound
+            gSounds['paddle-hit']:play()
 
-        -- handle each powerup type TODO 
+            -- move the powerup off the screen 
+            powerup.y = VIRTUAL_HEIGHT + 50
 
+            -- handle each powerup type TODO 
+
+            if powerup.type == 9 then -- + 2 balls type, middle of the screen, random speed
+                for i = 1, 2 do 
+                    local ball = Ball(math.random(7))
+                    ball.y = VIRTUAL_HEIGHT/2
+                    ball.x = VIRTUAL_WIDTH/2
+                    ball.dx = math.random(-200, 200)
+                    ball.dy = math.random(-50, -60)
+                    self.balls[#self.balls + 1] = ball
+                    self.ballCounter = self.ballCounter + 1
+                end
+            end 
+        end
+    end 
 
     for _, ball in ipairs(self.balls) do 
         ball:update(dt)
@@ -240,6 +268,10 @@ function PlayState:render()
     for _, ball in ipairs(self.balls) do 
         ball:render()
     end
+
+    for _, powerup in ipairs(self.powerups) do 
+        powerup:render()
+    end 
 
     renderScore(self.score)
     renderHealth(self.health)
