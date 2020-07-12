@@ -140,6 +140,9 @@ function PlayState:update(dt)
                     -- multiply recover points by 2
                     self.recoverPoints = math.min(100000, self.recoverPoints * 2)
 
+                    -- grow paddle
+                    self.paddle:grow()
+
                     -- play recover sound effect
                     gSounds['recover']:play()
                 end
@@ -219,6 +222,9 @@ function PlayState:update(dt)
 
             if self.ballCounter == 0 then
                 self.health = self.health - 1
+
+                self.paddle:shrink()
+                
                 gSounds['hurt']:play()
             end
 
