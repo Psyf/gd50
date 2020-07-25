@@ -55,7 +55,13 @@ end
     we have to return a subset of GenerateQuads.
 ]]
 function GenerateQuadsBricks(atlas)
-    return table.slice(GenerateQuads(atlas, 32, 16), 1, 21)
+    local sliced = table.slice(GenerateQuads(atlas, 32, 16), 1, 24)
+
+    -- removing the small icons froim the brick table
+    table.remove(sliced, 23)
+    table.remove(sliced, 22)
+    
+    return sliced
 end
 
 --[[

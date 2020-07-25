@@ -21,9 +21,6 @@ end
 
 function Powerup:update()
     self.y = self.y + self.dy 
-
-    -- will give it a feathery fall
-    self.x = self.x + math.random(-1, 1)
 end 
 
 --[[

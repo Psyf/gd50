@@ -60,6 +60,9 @@ function Brick:init(x, y)
     self.width = 32
     self.height = 16
     
+    -- used for locked bricks later on
+    self.locked = false 
+
     -- used to determine whether this brick should be rendered
     self.inPlay = true
 
@@ -85,6 +88,10 @@ end
     changing its color otherwise.
 ]]
 function Brick:hit()
+    -- sound on hit
+    gSounds['brick-hit-2']:stop()
+    gSounds['brick-hit-2']:play()
+
     -- set the particle system to interpolate between two colors; in this case, we give
     -- it our self.color but with varying alpha; brighter for higher tiers, fading to 0
     -- over the particle's lifetime (the second color)
@@ -99,10 +106,6 @@ function Brick:hit()
         0
     )
     self.psystem:emit(64)
-
-    -- sound on hit
-    gSounds['brick-hit-2']:stop()
-    gSounds['brick-hit-2']:play()
 
     -- if we're at a higher tier than the base, we need to go down a tier
     -- if we're already at the lowest color, else just go down a color
@@ -127,6 +130,15 @@ function Brick:hit()
         gSounds['brick-hit-1']:stop()
         gSounds['brick-hit-1']:play()
     end
+    
+end
+
+function Brick:lock()
+    self.locked = true
+end 
+
+function Brick:unlock()
+    self.locked = false 
 end
 
 function Brick:update(dt)
@@ -135,11 +147,15 @@ end
 
 function Brick:render()
     if self.inPlay then
-        love.graphics.draw(gTextures['main'], 
-            -- multiply color by 4 (-1) to get our color offset, then add tier to that
-            -- to draw the correct tier and color brick onto the screen
-            gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
-            self.x, self.y)
+        if self.locked then 
+            love.graphics.draw(gTextures['main'], gFrames['bricks'][22], self.x, self.y)
+        else 
+            love.graphics.draw(gTextures['main'], 
+                -- multiply color by 4 (-1) to get our color offset, then add tier to that
+                -- to draw the correct tier and color brick onto the screen
+                gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
+                self.x, self.y)
+        end
     end
 end
 

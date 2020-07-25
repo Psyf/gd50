@@ -34,6 +34,8 @@ function PlayState:enter(params)
 
     self.powerups = {}
 
+    gUnlockPower = false
+
     -- give ball random starting velocity
     for _, ball in ipairs(self.balls) do 
         ball.dx = math.random(-200, 200)
@@ -58,21 +60,23 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
 
-    -- randomly generate powerup TODO 
-    local p = math.random(600) 
-    if p == 1 then 
+    -- randomly generate powerup 
+    local p = math.random(1200) 
+    if p == 1 or p == 2  then 
         self.powerups[#self.powerups + 1] = Powerup(9)
+    elseif p == 3 then 
+        self.powerups[#self.powerups + 1] = Powerup(10)
     end 
 
-    -- for each powerup TODO 
+    -- for each powerup 
     for _, powerup in ipairs(self.powerups) do
         powerup:update()
-        -- see if powerup beyond bottom of screen  TODO 
+        -- see if powerup beyond bottom of screen 
         if powerup.y > VIRTUAL_HEIGHT then 
             powerup.inPlay = false 
         end
 
-        -- see if powerup hit TODO 
+        -- see if powerup hit 
         if powerup.inPlay and powerup:collides(self.paddle) then 
             -- play a sound
             gSounds['paddle-hit']:play()
@@ -80,8 +84,7 @@ function PlayState:update(dt)
             -- move the powerup off the screen 
             powerup.y = VIRTUAL_HEIGHT + 50
 
-            -- handle each powerup type TODO 
-
+            -- handle each powerup type
             if powerup.type == 9 then -- + 2 balls type, middle of the screen, random speed
                 for i = 1, 2 do 
                     local ball = Ball(math.random(7))
@@ -92,6 +95,8 @@ function PlayState:update(dt)
                     self.balls[#self.balls + 1] = ball
                     self.ballCounter = self.ballCounter + 1
                 end
+            elseif powerup.type == 10 then 
+                gUnlockPower = true -- now we can unlock locked bricks
             end 
         end
     end 
@@ -126,11 +131,20 @@ function PlayState:update(dt)
             -- only check collision if we're in play
             if brick.inPlay and ball:collides(brick) then
 
-                -- add to score
-                self.score = self.score + (brick.tier * 200 + brick.color * 25)
+                -- if I have powerup, I can unlock locked bricks 
+                if brick.locked and gUnlockPower then
+                    -- and get bonus points too! 
+                    brick:unlock()
+                    self.score = self.score + 1000 
+                end 
 
-                -- trigger the brick's hit function, which removes it from play
-                brick:hit()
+                if brick.locked == false then 
+                    -- trigger the brick's hit function, which removes it from play
+                    brick:hit()
+
+                    -- add to score
+                    self.score = self.score + (brick.tier * 200 + brick.color * 25)
+                end
 
                 -- if we have enough points, recover a point of health
                 if self.score > self.recoverPoints then

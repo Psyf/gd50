@@ -15,6 +15,8 @@
 
 Paddle = Class{}
 
+gKeyPower = false
+
 --[[
     Our Paddle will initialize at the same spot every time, in the middle
     of the world horizontally, toward the bottom.
