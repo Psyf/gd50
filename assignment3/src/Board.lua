@@ -84,8 +84,8 @@ function Board:calculateMatches()
                     local match = {}
 
                     -- go backwards from here by matchNum
-                    for x2 = x - 1, x - matchNum, -1 do
-                        
+                    for x2 = x - 1, x - matchNum, -1 do 
+
                         -- add each tile to the match that's in that match
                         table.insert(match, self.tiles[y][x2])
                     end
@@ -163,6 +163,22 @@ function Board:calculateMatches()
 
     -- store matches for later reference
     self.matches = matches
+
+    -- if we have a shiny, add everything else into the
+    local shinyMatches = {} 
+    for k, match in pairs(self.matches) do 
+        for j, tile in pairs(match) do 
+            if tile.shiny then 
+                for i = 1, 8 do 
+                    table.insert(shinyMatches, self.tiles[tile.gridY][i])
+                end
+            end
+        end 
+    end 
+
+    if #shinyMatches > 0 then 
+        table.insert(matches, shinyMatches)
+    end 
 
     -- return matches table if > 0, else just return false
     return #self.matches > 0 and self.matches or false
