@@ -30,6 +30,7 @@ function BeginGameState:enter(def)
     
     -- grab level # from the def we're passed
     self.level = def.level
+    self.board = Board(VIRTUAL_WIDTH - 272, 16, self.level)
 
     --
     -- animate our white screen fade-in, then animate a drop-down with
