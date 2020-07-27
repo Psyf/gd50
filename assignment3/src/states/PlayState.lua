@@ -142,38 +142,15 @@ function PlayState:update(dt)
                 gSounds['error']:play()
                 self.highlightedTile = nil
             else
-                
-                -- swap grid positions of tiles
-                local tempX = self.highlightedTile.gridX
-                local tempY = self.highlightedTile.gridY
-
                 local newTile = self.board.tiles[y][x]
-
-                self.highlightedTile.gridX = newTile.gridX
-                self.highlightedTile.gridY = newTile.gridY
-                newTile.gridX = tempX
-                newTile.gridY = tempY
-
-                -- swap tiles in the tiles table
-                self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
-                    self.highlightedTile
-
-                self.board.tiles[newTile.gridY][newTile.gridX] = newTile
+                self.board:swap(self.highlightedTile, newTile)
 
                 -- if it doesn't result in a match, don't allow the swap
                 local matchTest = self.board:calculateMatches()
-                print(matchTest)
+
                 if matchTest == false then 
-                    -- undo the swap 
-                    self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] = newTile 
-                    self.board.tiles[newTile.gridY][newTile.gridX] = self.highlightedTile 
-
-                    newTile.gridX = self.highlightedTile.gridX
-                    newTile.gridY = self.highlightedTile.gridY
-
-                    self.highlightedTile.gridX = tempX
-                    self.highlightedTile.gridY = tempY
-                    
+                    gSounds['error']:play()
+                    self.board:swap(self.highlightedTile, newTile)
                     self.highlightedTile = nil
                 else
                     -- tween coordinates between the two so they swap

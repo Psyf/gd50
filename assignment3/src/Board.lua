@@ -278,8 +278,22 @@ function Board:getFallingTiles()
     return tweens
 end
 
-function Board:swap(x1, y1, x2, y2)
-    return false
+function Board:swap(tile1, tile2)
+
+        -- swap grid positions of tiles
+        local tempX = tile1.gridX
+        local tempY = tile1.gridY
+        
+        tile1.gridX = tile2.gridX
+        tile1.gridY = tile2.gridY
+        tile2.gridX = tempX
+        tile2.gridY = tempY
+
+        -- swap tiles in the tiles table
+        self.tiles[tile1.gridY][tile1.gridX] =
+            tile1
+
+        self.tiles[tile2.gridY][tile2.gridX] = tile2
 end 
 
 function Board:render()
