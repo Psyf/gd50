@@ -43,12 +43,17 @@ function Board:initializeTiles()
         end
     end
 
-    while self:calculateMatches() do
+    while self:calculateMatches() or self:matchExists() == false do
         
         -- recursively initialize if matches were returned so we always have
         -- a matchless board on start
+
+        -- but make sure initial board has a potential move
         self:initializeTiles()
     end
+
+    
+
 end
 
 --[[
@@ -283,7 +288,7 @@ function Board:swap(tile1, tile2)
         -- swap grid positions of tiles
         local tempX = tile1.gridX
         local tempY = tile1.gridY
-        
+
         tile1.gridX = tile2.gridX
         tile1.gridY = tile2.gridY
         tile2.gridX = tempX
@@ -295,6 +300,67 @@ function Board:swap(tile1, tile2)
 
         self.tiles[tile2.gridY][tile2.gridX] = tile2
 end 
+
+function Board:matchExists()
+    for i = 1, 8 do 
+        for j = 1, 8 do 
+            local curTile = self.tiles[j][i]
+            -- find all neighbours
+            local neighbours = self:getNeighbours(i, j)
+
+            for k, neighbour in pairs(neighbours) do 
+                -- swap with neighbours
+                self:swap(curTile, neighbour)
+
+                -- check match
+                local matchTest = self:calculateMatches()
+
+                --swap back 
+                self:swap(curTile, neighbour)
+
+                if matchTest ~= false then
+                    print(#matchTest)
+                    print(j, i, neighbour.gridY, neighbour.gridX)
+                    return true 
+                end 
+            end
+        end 
+    end 
+
+    return false 
+end 
+
+function Board:getNeighbours(x, y)
+    local neighbours = {}
+
+    if y ~= 1 then 
+        table.insert(neighbours, self.tiles[y-1][x])
+    end 
+    
+    if y ~= 8 then 
+        table.insert(neighbours, self.tiles[y+1][x])
+    end  
+
+    if x ~= 1 then 
+        table.insert(neighbours, self.tiles[y][x-1])
+    end
+
+    if x ~= 8 then
+        table.insert(neighbours, self.tiles[y][x+1])
+    end
+
+    return neighbours 
+end 
+    
+
+function Board:removeAll()
+    for i = 1, 8 do 
+        for j = 1, 8 do 
+            self.tiles[i][j] = nil
+        end 
+    end 
+end
+
 
 function Board:render()
     for y = 1, #self.tiles do
