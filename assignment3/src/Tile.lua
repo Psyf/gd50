@@ -26,6 +26,10 @@ function Tile:init(x, y, color, variety)
     -- tile appearance/points
     self.color = color
     self.variety = variety
+
+    -- different shapes with different scores
+    -- flat worth 50, and increases by 10 as we go to the right
+    self.worth = 40 + self.variety*10
 end
 
 function Tile:render(x, y)
