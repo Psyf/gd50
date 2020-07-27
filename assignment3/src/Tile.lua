@@ -30,6 +30,12 @@ function Tile:init(x, y, color, variety)
     -- different shapes with different scores
     -- flat worth 50, and increases by 10 as we go to the right
     self.worth = 40 + self.variety*10
+
+    if math.random(10) == 1 then 
+        self.shiny = true
+    else
+        self.shiny = false 
+    end
 end
 
 function Tile:render(x, y)
@@ -43,4 +49,9 @@ function Tile:render(x, y)
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.draw(gTextures['main'], gFrames['tiles'][self.color][self.variety],
         self.x + x, self.y + y)
+
+    -- draw the shine 
+    if self.shiny then 
+        love.graphics.print('S', self.x+x, self.y+y, -0.2, 0.8, 0.8)
+    end
 end
