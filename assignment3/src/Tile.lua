@@ -38,6 +38,12 @@ function Tile:init(x, y, color, variety)
     end
 end
 
+function Tile:gatherPoints()
+    local temp = self.worth 
+    self.worth = 0 
+    return temp
+end
+
 function Tile:render(x, y)
     
     -- draw shadow

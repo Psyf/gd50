@@ -198,7 +198,7 @@ function PlayState:calculateMatches()
 
             local matchPoints = 0
             for j, tile in pairs(match) do 
-                matchPoints = matchPoints + tile.worth
+                matchPoints = matchPoints + tile:gatherPoints()
             end
 
             self.score = self.score + matchPoints
