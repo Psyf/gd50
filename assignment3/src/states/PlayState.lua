@@ -161,17 +161,6 @@ function PlayState:update(dt)
                      -- once the swap is finished, we can tween falling blocks as needed
                     :finish(function()
                         self:calculateMatches()
-
-                        if self.board:matchExists() == false then 
-                            self.board:removeAll()
-                            
-                            print("NO MORE MOVES!")
-
-                            local tilesToFall = self.board:getFallingTiles()
-                            Timer.tween(0.25, tilesToFall):finish(function()
-                                self:calculateMatches()
-                            end)
-                        end  
                     end)
                 end
             end
@@ -226,6 +215,17 @@ function PlayState:calculateMatches()
     
     -- if no matches, we can continue playing
     else
+
+        -- is there a potential for match? 
+        -- if not, reinit board
+        while self.board:matchExists() == false do 
+            self.board:removeAll()
+            local tilesToFall = self.board:getFallingTiles()
+            Timer.tween(1, tilesToFall):finish(function()
+                self:calculateMatches()
+            end)
+        end  
+
         self.canInput = true
     end
 end

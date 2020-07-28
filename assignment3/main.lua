@@ -45,7 +45,6 @@ VIRTUAL_HEIGHT = 288
 BACKGROUND_SCROLL_SPEED = 80
 
 function love.load()
-    
     -- window bar title
     love.window.setTitle('Match 3')
 
