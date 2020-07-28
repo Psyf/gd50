@@ -35,9 +35,9 @@ function Board:initializeTiles()
             
             -- create a new tile at X,Y with a random color and variety
             if self.level then 
-                table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(18), math.random(self.level)))
+                table.insert(self.tiles[tileY], Tile(tileX, tileY,math.random(12), math.random(self.level)))
             else 
-                table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(18), math.random(6)))
+                table.insert(self.tiles[tileY], Tile(tileX, tileY,math.random(12), math.random(6)))
             end 
 
         end
@@ -268,7 +268,7 @@ function Board:getFallingTiles()
             if not tile then
 
                 -- new tile with random color and variety
-                local tile = Tile(x, y, math.random(18), math.random(self.level))
+                local tile = Tile(x, y,math.random(12), math.random(self.level))
                 tile.y = -32
                 self.tiles[y][x] = tile
 
