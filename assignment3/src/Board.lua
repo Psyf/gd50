@@ -309,6 +309,7 @@ function Board:matchExists()
             local neighbours = self:getNeighbours(i, j)
 
             for k, neighbour in pairs(neighbours) do 
+
                 -- swap with neighbours
                 self:swap(curTile, neighbour)
 
@@ -319,8 +320,6 @@ function Board:matchExists()
                 self:swap(curTile, neighbour)
 
                 if matchTest ~= false then
-                    print(#matchTest)
-                    print(j, i, neighbour.gridY, neighbour.gridX)
                     return true 
                 end 
             end

@@ -56,8 +56,6 @@ function Tile:render(x, y)
     love.graphics.draw(gTextures['main'], gFrames['tiles'][self.color][self.variety],
         self.x + x, self.y + y)
 
-    love.graphics.print(self.color, self.x+x, self.y+y)
-
     -- draw the shine 
     if self.shiny then 
         love.graphics.print('S', self.x+x, self.y+y, -0.2, 0.8, 0.8)
